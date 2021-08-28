@@ -1,10 +1,10 @@
-<html lang="zh">
+<html>
 <head>
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>关于 - 饮尽鸿爪下的雪泥</title>
+<title>linux 安装nodejs方法 | 饮尽鸿爪下的雪泥</title>
 
 <link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1630122320095">
 
@@ -25,7 +25,7 @@
 
 
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
@@ -86,18 +86,52 @@
 </nav>
 
     <div class="post-container">
-        <div class="post-detail">
+        <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
-                <div class="post-content">
+                <h2 class="post-title">
+                    linux 安装nodejs方法
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-08-28 ·
+                    </time>
                     
+                </div>
+                <div class="post-content">
+                    <h1 id="下载nodejs压缩包">下载nodejs压缩包</h1>
+<p>在nodejs官方网站download页面中选择需要使用的版本,可以选择LTS或current,选择对应系统右键复制链接地址https://nodejs.org/dist/v14.17.5/</p>
+<p><img src="https://ceoifung.github.io/post-images/1630122101350.png" alt="" loading="lazy"><br>
+选择合适版本的软件，然后将软件下载到本地，再通过ssh工具将软件上传到ubuntu系统中</p>
+<h1 id="解压">解压</h1>
+<pre><code class="language-shell">tar -xvf node-v14.17.5-linux-x64.tar.xz
+</code></pre>
+<h1 id="配置软连接">配置软连接</h1>
+<pre><code class="language-shell">sudo ln /home/ubuntu/node-v14.17.5-linux-x64/bin/node /usr/local/bin/node
+sudo ln /home/ubuntu/node-v14.17.5-linux-x64/bin/npm /usr/local/bin/npm
+</code></pre>
+<p>配置完毕之后，可以查看一下是否安装成功</p>
+<pre><code class="language-shell">node -v
+npm -v
+</code></pre>
+
                 </div>
             </article>
         </div>
-        <br>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://ceoifung.github.io/post/deb-pack/" class="post-title gt-a-link">
+                    Debian系统打包deb程序教程
+                </a>
+            </div>
         
 
         
 
+        
+
+        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first"></div>
