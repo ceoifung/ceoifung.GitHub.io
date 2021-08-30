@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>nodejs | 饮尽鸿爪下的雪泥</title>
+<title>android检测用户是否使用代理上网 | 饮尽鸿爪下的雪泥</title>
 
 <link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1630310637411">
 
@@ -25,11 +25,11 @@
 
 
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -85,49 +85,92 @@
     </div>
 </nav>
 
-        <div class="current-tag-container">
-            <h2 class="title gt-c-content-color-first">
-                #nodejs
-            </h2>
-        </div>
-        <div class="post-list-container">
-    <div class="post-inner">
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://ceoifung.github.io/post/install_nodejs/">
-                            <span class="post-title gt-c-content-color-first">linux 安装nodejs方法</span>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    android检测用户是否使用代理上网
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-08-30 ·
+                    </time>
+                    
+                        <a href="https://ceoifung.github.io/tag/veK5_wEPF/" class="post-tags">
+                            # android
                         </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-08-28 ·
-                        </time>
-                        
-                            <a href="https://ceoifung.github.io/tag/xtShXGpeX/" class="post-tag">
-                                # Linux
-                            </a>
-                        
-                            <a href="https://ceoifung.github.io/tag/qUgIHKhlc_/" class="post-tag">
-                                # nodejs
-                            </a>
-                        
-                    </div>
+                    
+                        <a href="https://ceoifung.github.io/tag/8T4cQy4Va2/" class="post-tags">
+                            # proxy
+                        </a>
+                    
                 </div>
-                
+                <div class="post-content">
+                    <blockquote>
+<p>在一些网络需求中，为了防止用户抓包，往往采用检测用户当前网络是不是VPN上网的手段。但是依照国内网上的写法，测试中发现根本就没有用。所以经过一段时间的查询之后，找到了解决方法。</p>
+</blockquote>
+<h1 id="以往的写法">以往的写法</h1>
+<pre><code class="language-java">/* *
+* 判断设备 是否使用代理上网
+*/
+private boolean isWifiProxy(Context context) {
+    final boolean IS_ICS_OR_LATER = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+    String proxyAddress;
+    int proxyPort;
+    if (IS_ICS_OR_LATER) {
+        proxyAddress = System.getProperty(&quot;http.proxyHost&quot;);
+        String portStr = System.getProperty(&quot;http.proxyPort&quot;);
+        proxyPort = Integer.parseInt((portStr != null ? portStr : &quot;-1&quot;));
+    } else {
+        proxyAddress = android.net.Proxy.getHost(context);
+        proxyPort = android.net.Proxy.getPort(context);
+    }
+    return (!TextUtils.isEmpty(proxyAddress)) &amp;&amp; (proxyPort != -1);
+}
+</code></pre>
+<h1 id="现在的新写法">现在的新写法</h1>
+<blockquote>
+<p>注意：使用该写法容易产生一刀切的问题，但是目前没有找到很好的解决方案，因此只能将就用一下</p>
+</blockquote>
+<pre><code class="language-java">/**
+* 检测用户是否使用VPN代理上网抓包
+* @param context 上下文
+* @return vpn使用结果
+*/
+public static boolean isVpnProxy(final Context context) {
+    ConnectivityManager connMgr = (ConnectivityManager)
+            context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    boolean isVpnConn = false;
+    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+        for (Network network : connMgr.getAllNetworks()) {
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_VPN) {
+                isVpnConn |= networkInfo.isConnected();
+            }
+        }
+    }
+    return isVpnConn;
+}
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://ceoifung.github.io/post/install_nodejs/" class="post-title gt-a-link">
+                    linux 安装nodejs方法
+                </a>
             </div>
         
-    </div>
-</div>
-        <div class="pagination-container">
-    
-    
-</div>
+
+        
+
+        
+
+        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first"></div>

@@ -2,13 +2,67 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-08-28T03:56:57.629Z</updated>
+    <updated>2021-08-30T08:04:13.554Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
     <logo>https://ceoifung.github.io/images/avatar.png</logo>
     <icon>https://ceoifung.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 饮尽鸿爪下的雪泥</rights>
+    <entry>
+        <title type="html"><![CDATA[android检测用户是否使用代理上网]]></title>
+        <id>https://ceoifung.github.io/post/android-check-proxy/</id>
+        <link href="https://ceoifung.github.io/post/android-check-proxy/">
+        </link>
+        <updated>2021-08-30T07:55:30.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>在一些网络需求中，为了防止用户抓包，往往采用检测用户当前网络是不是VPN上网的手段。但是依照国内网上的写法，测试中发现根本就没有用。所以经过一段时间的查询之后，找到了解决方法。</p>
+</blockquote>
+<h1 id="以往的写法">以往的写法</h1>
+<pre><code class="language-java">/* *
+* 判断设备 是否使用代理上网
+*/
+private boolean isWifiProxy(Context context) {
+    final boolean IS_ICS_OR_LATER = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+    String proxyAddress;
+    int proxyPort;
+    if (IS_ICS_OR_LATER) {
+        proxyAddress = System.getProperty(&quot;http.proxyHost&quot;);
+        String portStr = System.getProperty(&quot;http.proxyPort&quot;);
+        proxyPort = Integer.parseInt((portStr != null ? portStr : &quot;-1&quot;));
+    } else {
+        proxyAddress = android.net.Proxy.getHost(context);
+        proxyPort = android.net.Proxy.getPort(context);
+    }
+    return (!TextUtils.isEmpty(proxyAddress)) &amp;&amp; (proxyPort != -1);
+}
+</code></pre>
+<h1 id="现在的新写法">现在的新写法</h1>
+<blockquote>
+<p>注意：使用该写法容易产生一刀切的问题，但是目前没有找到很好的解决方案，因此只能将就用一下</p>
+</blockquote>
+<pre><code class="language-java">/**
+* 检测用户是否使用VPN代理上网抓包
+* @param context 上下文
+* @return vpn使用结果
+*/
+public static boolean isVpnProxy(final Context context) {
+    ConnectivityManager connMgr = (ConnectivityManager)
+            context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    boolean isVpnConn = false;
+    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+        for (Network network : connMgr.getAllNetworks()) {
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_VPN) {
+                isVpnConn |= networkInfo.isConnected();
+            }
+        }
+    }
+    return isVpnConn;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[linux 安装nodejs方法]]></title>
         <id>https://ceoifung.github.io/post/install_nodejs/</id>
