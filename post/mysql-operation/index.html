@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>饮尽鸿爪下的雪泥</title>
+<title>MySQL的一些常用操作 | 饮尽鸿爪下的雪泥</title>
 
 <link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1631860871518">
 
@@ -25,11 +25,11 @@
 
 
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -85,34 +85,56 @@
     </div>
 </nav>
 
-        <div class="post-container">
-            <div class="post-detail gt-bg-theme-color-first">
-                <article class="gt-post-content">
-                    <h2 class="post-title">标签</h2>
-        <div class="tags-container">
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/9cPOu1k0h/">#MySQL</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/veK5_wEPF/">#android</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/8T4cQy4Va2/">#proxy</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/xtShXGpeX/">#Linux</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/qUgIHKhlc_/">#nodejs</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/8R9Gbvfoy/">#Debian</a>
-            
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    MySQL的一些常用操作
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-09-17 ·
+                    </time>
+                    
+                        <a href="https://ceoifung.github.io/tag/9cPOu1k0h/" class="post-tags">
+                            # MySQL
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h1 id="解除mysql远程连接">解除MySQL远程连接</h1>
+<figure data-type="image" tabindex="1"><img src="https://ceoifung.github.io/post-images/1631860818629.png" alt="" loading="lazy"></figure>
+<h1 id="新建数据库用户">新建数据库用户</h1>
+<ul>
+<li>如下指令为新建MySQL用户，赋予只能对<code>ubtsn_db</code>数据库进行<code>select,insert,update,delete,drop,create</code>操作，该操作<code>主要针对公司远端服务器，保护数据安全</code></li>
+</ul>
+<pre><code class="language-shell">grant select,insert,update,delete,drop,create on ubtsn_db.* to ceoifung@&quot;%&quot; identified by &quot;xiaorgeek001?&quot;;
+</code></pre>
+<ul>
+<li>赋予用户对该表操作的所有权限</li>
+</ul>
+<pre><code class="language-shell">grant all privileges on ubtsn_db.* to ceoifung@&quot;%&quot; identified by &quot;xiaorgeek001?&quot;;
+</code></pre>
+
+                </div>
+            </article>
         </div>
-    </article>
-</div>
-</div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://ceoifung.github.io/post/android-check-proxy/" class="post-title gt-a-link">
+                    android检测用户是否使用代理上网
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first"></div>
     <div class="social-container">
