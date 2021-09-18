@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>linux 安装nodejs方法 | 饮尽鸿爪下的雪泥</title>
+<title>Linux系统软件更新的一种设计思路 | 饮尽鸿爪下的雪泥</title>
 
 <link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1631951368362">
 
@@ -89,38 +89,89 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    linux 安装nodejs方法
+                    Linux系统软件更新的一种设计思路
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2021-08-28 ·
+                        · 2021-09-18 ·
                     </time>
                     
-                        <a href="https://ceoifung.github.io/tag/xtShXGpeX/" class="post-tags">
-                            # Linux
-                        </a>
-                    
-                        <a href="https://ceoifung.github.io/tag/qUgIHKhlc_/" class="post-tags">
-                            # nodejs
+                        <a href="https://ceoifung.github.io/tag/DWEnkTHtS/" class="post-tags">
+                            # linux
                         </a>
                     
                 </div>
                 <div class="post-content">
-                    <h1 id="下载nodejs压缩包">下载nodejs压缩包</h1>
-<p>在nodejs官方网站download页面中选择需要使用的版本,可以选择LTS或current,选择对应系统右键复制链接地址https://nodejs.org/dist/v14.17.5/</p>
-<p><img src="https://ceoifung.github.io/post-images/1630122101350.png" alt="" loading="lazy"><br>
-选择合适版本的软件，然后将软件下载到本地，再通过ssh工具将软件上传到ubuntu系统中</p>
-<h1 id="解压">解压</h1>
-<pre><code class="language-shell">tar -xvf node-v14.17.5-linux-x64.tar.xz
+                    <h1 id="前言">前言</h1>
+<p>在Linux系统下开发软件存在一个更新的难题，一般来说，解决方法有如下几种方案：</p>
+<ul>
+<li>将软件上传到ubuntu的APT仓库，取得官方的资格认可，然后使用<code>sudo apt-get install 软件名称</code>来下载安装以及更新</li>
+<li>自行搭建APT仓库，在安装软件之前将自己的APT仓库源添加到系统中，此方法需要很精通Linux的一些操作指令，而且搭建方法也较为复杂，对于一般的新手来说比较艰难</li>
+<li>使用脚本更新，通过脚本的方式，拉取远端服务器上的脚本资源实现一键更新</li>
+</ul>
+<p>经过测试，发现脚本更新的方式最为简单，而且自由度高，因此本文将针对脚本更新的方式进行一个大致的说明教程</p>
+<h1 id="脚本更新方式描述">脚本更新方式描述</h1>
+<p>要想做到脚本更新的方式，需要遵循如下几个步骤：</p>
+<ul>
+<li>编写远程更新脚本</li>
+<li>在远端服务器存储软件包</li>
+<li>通过Linux的<code>curl</code>指令拉取远端的服务器脚本，并执行</li>
+</ul>
+<h2 id="远程更新脚本编写">远程更新脚本编写</h2>
+<p>远程脚本更新需要包含如下几个内容，比如是否需要传参，固件的下载地址等，下面以软件更新脚本<code>install.sh</code>作为一个简单的说明：</p>
+<pre><code class="language-shell">#! /bin/sh
+set -e
+case $1 in
+        &quot;roboticmaster&quot;)
+        myurl=&quot;https://github.com/XiaoRGEEK/OpenRoboticMaster/releases/download/v0.0.3/roboticmaster-amd64.deb&quot;
+        ;;
+        &quot;roboticmaster-zh&quot;)
+        myurl=&quot;https://gitee.com/xiaorgeek/open-robotic-master/attach_files/803287/download/roboticmaster-amd64.deb&quot;
+        ;;
+        &quot;xrosmanager&quot;)
+        myurl=&quot;https://github.com/XiaoRGEEK/OpenXROSManager/releases/download/v1.3.4/xrosmanager-arm64.deb&quot;
+        ;;
+        &quot;xrosmanager-zh&quot;)
+        myurl=&quot;https://gitee.com/xiaorgeek/open-xrosmanager/attach_files/807025/download/xrosmanager-arm64.deb&quot;
+        ;;
+        &quot;xrosmanager-pi&quot;)
+        myurl=&quot;https://github.com/XiaoRGEEK/OpenXROSManagerRaspberry/releases/download/v1.3.4/xrosmanager-raspberry-arm64.deb&quot;
+        ;;
+        &quot;xrosmanager-pi-zh&quot;)
+        myurl=&quot;https://gitee.com/xiaorgeek/open-xrosmanager-raspberry-pi/attach_files/819388/download/xrosmanager-raspberry-arm64.deb&quot;
+        ;;
+        *)
+        echo -e &quot;\033[31mMissing or incorrect parameters, at least one parameter required such as xrosmanager\033[0m&quot;
+        exit 1
+        ;;
+esac
+echo -e &quot;\033[35mDownloading...\033[0m&quot;
+wget $myurl -O xrpackage.deb
+if [ ! $? -eq 0 ]
+then
+        echo -e &quot;\033[31m download failed, Check the network \033[0m&quot;
+        rm -rf xrpackage.deb
+        exit 1
+fi
+echo -e &quot;\033[35mUpgrade package ready, start updating...\033[0m&quot;
+sudo dpkg -i xrpackage.deb
+if [ ! $? -eq 0 ]
+then
+        echo -e &quot;\033[31mInstallation failed, please check your system environment\033[0m&quot;
+        rm -rf xrpackage.deb
+        exit 1
+fi
+rm -rf xrpackage.deb
 </code></pre>
-<h1 id="配置软连接">配置软连接</h1>
-<pre><code class="language-shell">sudo ln /home/ubuntu/node-v14.17.5-linux-x64/bin/node /usr/local/bin/node
-sudo ln /home/ubuntu/node-v14.17.5-linux-x64/bin/npm /usr/local/bin/npm
+<p>如上方的更新脚本，<code>case</code>关键字代表判断传入的参数<code>$1</code>，如果存在多个软件更新内容的话可以使用这种判断方式，根据不同的参数设置不同的url，即软件下载地址。紧接着使用<code>wget $myurl -O xrpackage.deb</code>这一条指令拉取需要下载的软件，最后判断指令执行情况，根据需要编写自己的脚本。<br>
+<strong>注意：上述脚本需要放置在服务器</strong></p>
+<h2 id="在远端服务器存储软件包">在远端服务器存储软件包</h2>
+<p>我们最终实现的目的是远程的服务器的软件拉取到本地，首先我们就要存储软件到服务器上。这里选择的是将软件打包之后，存储到<code>gitee</code>和<code>github</code>上，因为这两个网站是免费的，而且方便我们进行相应的版本更新。当然，如果说有自己的需求的话，可以自行购买服务器存储，到时候连接过去就行。</p>
+<h2 id="curl-脚本编写">curl 脚本编写</h2>
+<p>以上步骤准备完毕之后，可以进行一个curl的脚本编写，将该脚本提供给相应的用户，让他运行该指令即可，在本次实例中，更新脚本最终的写法如下：</p>
+<pre><code class="language-shell">curl -s http://xxx.com/install.sh | bash -s &lt;软件名称&gt;
 </code></pre>
-<p>配置完毕之后，可以查看一下是否安装成功</p>
-<pre><code class="language-shell">node -v
-npm -v
-</code></pre>
+<p>如果不想暴露更新接口给到用户，可以写成相应的脚本形式，让用户直接运行脚本即可</p>
 
                 </div>
             </article>
@@ -129,8 +180,8 @@ npm -v
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://ceoifung.github.io/post/deb-pack/" class="post-title gt-a-link">
-                    Debian系统打包deb程序教程
+                <a href="https://ceoifung.github.io/post/mysql-operation/" class="post-title gt-a-link">
+                    MySQL的一些常用操作
                 </a>
             </div>
         
