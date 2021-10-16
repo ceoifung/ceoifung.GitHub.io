@@ -2,13 +2,29 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-09-18T07:50:08.234Z</updated>
+    <updated>2021-10-16T07:14:31.071Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
     <logo>https://ceoifung.github.io/images/avatar.png</logo>
     <icon>https://ceoifung.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 饮尽鸿爪下的雪泥</rights>
+    <entry>
+        <title type="html"><![CDATA[package.json 脚本复制文件]]></title>
+        <id>https://ceoifung.github.io/post/package-configure-copy-script/</id>
+        <link href="https://ceoifung.github.io/post/package-configure-copy-script/">
+        </link>
+        <updated>2021-10-16T07:10:06.000Z</updated>
+        <content type="html"><![CDATA[<p>在nodejs 的环境下，有时候需要在编译输出文件的时候，将一些配置文件复制到输出目录，因此可以在package.json的script里面配置复制脚本，比如：</p>
+<pre><code class="language-json">&quot;scripts&quot;: {
+    &quot;start&quot;: &quot;npm index.js&quot;,
+    &quot;pack&quot;: &quot;pkg -t win package.json &amp;&amp; npm run copy&quot;,
+    &quot;copy&quot;: &quot;@powershell copy ./conf.ini ./dist/&quot;
+  }
+</code></pre>
+<p>@powershell的意思是使用window的powershell来执行复制命令，以上脚本只针对在window上的编译，如果是Linux的话，自行配置，目前没有测试</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Linux系统软件更新的一种设计思路]]></title>
         <id>https://ceoifung.github.io/post/linux-software-update/</id>
