@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://localhost:4000</id>
+    <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-10-16T07:14:55.004Z</updated>
+    <updated>2021-10-16T07:20:34.026Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://localhost:4000"/>
-    <link rel="self" href="http://localhost:4000/atom.xml"/>
-    <logo>http://localhost:4000/images/avatar.png</logo>
-    <icon>http://localhost:4000/favicon.ico</icon>
+    <link rel="alternate" href="https://ceoifung.github.io"/>
+    <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
+    <logo>https://ceoifung.github.io/images/avatar.png</logo>
+    <icon>https://ceoifung.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 饮尽鸿爪下的雪泥</rights>
     <entry>
         <title type="html"><![CDATA[package.json 脚本复制文件]]></title>
-        <id>http://localhost:4000/post/package-configure-copy-script/</id>
-        <link href="http://localhost:4000/post/package-configure-copy-script/">
+        <id>https://ceoifung.github.io/post/package-configure-copy-script/</id>
+        <link href="https://ceoifung.github.io/post/package-configure-copy-script/">
         </link>
         <updated>2021-10-16T07:10:06.000Z</updated>
         <content type="html"><![CDATA[<p>在nodejs 的环境下，有时候需要在编译输出文件的时候，将一些配置文件复制到输出目录，因此可以在package.json的script里面配置复制脚本，比如：</p>
@@ -27,8 +27,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Linux系统软件更新的一种设计思路]]></title>
-        <id>http://localhost:4000/post/linux-software-update/</id>
-        <link href="http://localhost:4000/post/linux-software-update/">
+        <id>https://ceoifung.github.io/post/linux-software-update/</id>
+        <link href="https://ceoifung.github.io/post/linux-software-update/">
         </link>
         <updated>2021-09-18T07:25:12.000Z</updated>
         <content type="html"><![CDATA[<h1 id="前言">前言</h1>
@@ -105,12 +105,12 @@ rm -rf xrpackage.deb
     </entry>
     <entry>
         <title type="html"><![CDATA[MySQL的一些常用操作]]></title>
-        <id>http://localhost:4000/post/mysql-operation/</id>
-        <link href="http://localhost:4000/post/mysql-operation/">
+        <id>https://ceoifung.github.io/post/mysql-operation/</id>
+        <link href="https://ceoifung.github.io/post/mysql-operation/">
         </link>
         <updated>2021-09-17T06:38:17.000Z</updated>
         <content type="html"><![CDATA[<h1 id="解除mysql远程连接">解除MySQL远程连接</h1>
-<figure data-type="image" tabindex="1"><img src="http://localhost:4000/post-images/1631860818629.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://ceoifung.github.io/post-images/1631860818629.png" alt="" loading="lazy"></figure>
 <h1 id="新建数据库用户">新建数据库用户</h1>
 <ul>
 <li>如下指令为新建MySQL用户，赋予只能对<code>ubtsn_db</code>数据库进行<code>select,insert,update,delete,drop,create</code>操作，该操作<code>主要针对公司远端服务器，保护数据安全</code></li>
@@ -126,8 +126,8 @@ rm -rf xrpackage.deb
     </entry>
     <entry>
         <title type="html"><![CDATA[android检测用户是否使用代理上网]]></title>
-        <id>http://localhost:4000/post/android-check-proxy/</id>
-        <link href="http://localhost:4000/post/android-check-proxy/">
+        <id>https://ceoifung.github.io/post/android-check-proxy/</id>
+        <link href="https://ceoifung.github.io/post/android-check-proxy/">
         </link>
         <updated>2021-08-30T07:55:30.000Z</updated>
         <content type="html"><![CDATA[<blockquote>
@@ -180,13 +180,13 @@ public static boolean isVpnProxy(final Context context) {
     </entry>
     <entry>
         <title type="html"><![CDATA[linux 安装nodejs方法]]></title>
-        <id>http://localhost:4000/post/install_nodejs/</id>
-        <link href="http://localhost:4000/post/install_nodejs/">
+        <id>https://ceoifung.github.io/post/install_nodejs/</id>
+        <link href="https://ceoifung.github.io/post/install_nodejs/">
         </link>
         <updated>2021-08-28T03:39:11.000Z</updated>
         <content type="html"><![CDATA[<h1 id="下载nodejs压缩包">下载nodejs压缩包</h1>
 <p>在nodejs官方网站download页面中选择需要使用的版本,可以选择LTS或current,选择对应系统右键复制链接地址https://nodejs.org/dist/v14.17.5/</p>
-<p><img src="http://localhost:4000/post-images/1630122101350.png" alt="" loading="lazy"><br>
+<p><img src="https://ceoifung.github.io/post-images/1630122101350.png" alt="" loading="lazy"><br>
 选择合适版本的软件，然后将软件下载到本地，再通过ssh工具将软件上传到ubuntu系统中</p>
 <h1 id="解压">解压</h1>
 <pre><code class="language-shell">tar -xvf node-v14.17.5-linux-x64.tar.xz
@@ -203,8 +203,8 @@ npm -v
     </entry>
     <entry>
         <title type="html"><![CDATA[Debian系统打包deb程序教程]]></title>
-        <id>http://localhost:4000/post/deb-pack/</id>
-        <link href="http://localhost:4000/post/deb-pack/">
+        <id>https://ceoifung.github.io/post/deb-pack/</id>
+        <link href="https://ceoifung.github.io/post/deb-pack/">
         </link>
         <updated>2021-08-24T08:20:28.000Z</updated>
         <content type="html"><![CDATA[<h2 id="1-适用环境">1. 适用环境</h2>
