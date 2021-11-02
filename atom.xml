@@ -2,13 +2,66 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-10-16T07:25:03.622Z</updated>
+    <updated>2021-11-02T06:14:10.311Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
     <logo>https://ceoifung.github.io/images/avatar.png</logo>
     <icon>https://ceoifung.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 饮尽鸿爪下的雪泥</rights>
+    <entry>
+        <title type="html"><![CDATA[创建electron-vue模板]]></title>
+        <id>https://ceoifung.github.io/post/how-to-create-vue-electron-template/</id>
+        <link href="https://ceoifung.github.io/post/how-to-create-vue-electron-template/">
+        </link>
+        <updated>2021-11-02T06:07:13.000Z</updated>
+        <content type="html"><![CDATA[<p>在很多情况下需要创建electron-vue模板，以下常用的常见套路</p>
+<h2 id="创建vue项目">创建vue项目</h2>
+<pre><code class="language-shell">vue create my-electron-template
+</code></pre>
+<h2 id="添加electron-builder依赖">添加electron-builder依赖</h2>
+<pre><code class="language-shell">cd my-electron-template
+vue add electron-builder
+
+</code></pre>
+<h2 id="构建脚本">构建脚本</h2>
+<pre><code class="language-shell">yarn
+
+yarn run electron-serve
+
+yarn run electron-build
+</code></pre>
+<h2 id="添加vueconfigjs">添加vue.config.js</h2>
+<p>由于前端可能需要访问electron的一些内容，因此需要配置vue.config.js文件，避免产生构建失败的问题</p>
+<pre><code class="language-javascript">module.exports = {
+    pluginOptions: {
+        electronBuilder: {
+            nodeIntegration: true,
+            builderOptions: {
+                &quot;appId&quot;: &quot;com.xiaor.roboticmaster&quot;,
+                &quot;productName&quot;: &quot;RoboticMaster&quot;,//项目名，也是生成的安装文件名
+                &quot;copyright&quot;: &quot;Copyright © 2021, Powered by ceoifung.&quot;,//版权信息
+                &quot;directories&quot;: {
+                    &quot;output&quot;: &quot;./dist&quot;//输出文件路径，之前编译的默认是dist_electron
+                },
+                &quot;win&quot;: {
+                    &quot;icon&quot;: &quot;./build/logo.ico&quot;,//图标路径
+                },
+                &quot;linux&quot;: {
+                    &quot;target&quot;: &quot;deb&quot;
+                },
+                &quot;extraResources&quot;: { // 拷贝dll等静态文件到指定位置
+                    &quot;from&quot;: &quot;./static/conf.ini&quot;,
+                    &quot;to&quot;: &quot;conf.ini&quot;
+                },
+                // options placed here will be merged with default configuration and passed to electron-builder
+            }
+        }
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[package.json 脚本复制文件]]></title>
         <id>https://ceoifung.github.io/post/package-configure-copy-script/</id>
