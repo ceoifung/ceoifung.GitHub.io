@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-11-20T03:43:55.707Z</updated>
+    <updated>2021-11-20T05:53:33.912Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
@@ -346,7 +346,7 @@ public void onCreate(Bundle icicle) {
 	// 省略
 	serviceConnection = new XRServiceConnection();
 	serviceConnection.setIGetMessageCallBack(WIFIRobot.this);
-	XRMqttService.setHost(Constant.CONTROL_URL);
+	XRMqttService.setHost(&quot;tcp://&quot;+Constant.CONTROL_URL);
 	XRMqttService.setSubTopic(&quot;xrrobot/client/#&quot;);
 	XRMqttService.setClientId(&quot;android-iot-&quot; + getRandomString(6));
 	//		XRMqttService.setUsername(&quot;android-client&quot;);
