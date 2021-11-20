@@ -2,13 +2,369 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-11-02T06:21:38.391Z</updated>
+    <updated>2021-11-20T03:43:55.707Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
     <logo>https://ceoifung.github.io/images/avatar.png</logo>
     <icon>https://ceoifung.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 饮尽鸿爪下的雪泥</rights>
+    <entry>
+        <title type="html"><![CDATA[Android Mqtt使用]]></title>
+        <id>https://ceoifung.github.io/post/android-mqtt-usage/</id>
+        <link href="https://ceoifung.github.io/post/android-mqtt-usage/">
+        </link>
+        <updated>2021-11-20T03:42:04.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="添加依赖">添加依赖</h1>
+<ul>
+<li>项目根目录</li>
+</ul>
+<pre><code class="language-gradle">repositories {
+    maven {
+        url &quot;https://repo.eclipse.org/content/repositories/paho-releases/&quot;
+    }
+}
+</code></pre>
+<ul>
+<li>app目录下的build.gradle中添加：</li>
+</ul>
+<pre><code class="language-gradle">dependencies {
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.1'
+}
+</code></pre>
+<h1 id="声明权限以及添加服务">声明权限以及添加服务</h1>
+<pre><code class="language-xml">    &lt;uses-permission android:name=&quot;android.permission.WAKE_LOCK&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.READ_PHONE_STATE&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.READ_EXTERNAL_STORAGE&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+	
+	    &lt;!-- Mqtt服务 --&gt;
+    &lt;service android:name=&quot;org.eclipse.paho.android.service.MqttService&quot; /&gt;
+</code></pre>
+<h1 id="xrmqttservice">XRMqttService</h1>
+<p><strong>XRMqttService要手动添加到AndroidManifest.xml中去，如果没有注册的话，mqtt服务将不会生效</strong></p>
+<pre><code class="language-java">public class XRMqttService extends Service {
+
+    public static final String TAG = &quot;XRMqttService&quot;;
+
+    private static MqttAndroidClient client;
+    private MqttConnectOptions conOpt;
+
+    private static String host = &quot;tcp://rolyrobot.com&quot;;
+    private static String username = &quot;androidcli&quot;;
+    private static String password = &quot;password&quot;;
+    private static String subTopic = &quot;ForTest&quot;;      //要订阅的主题
+    private static String clientId = &quot;androidId&quot;;//客户端标识
+    private IGetMessageCallBack IGetMessageCallBack;
+
+
+    public static void setHost(String host) {
+        XRMqttService.host = host;
+    }
+
+    public static void setUsername(String username) {
+        XRMqttService.username = username;
+    }
+
+    public static void setPassword(String password) {
+        XRMqttService.password = password;
+    }
+
+    public static void setSubTopic(String subTopic) {
+        XRMqttService.subTopic = subTopic;
+    }
+
+    public static void setClientId(String clientId) {
+        XRMqttService.clientId = clientId;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        init();
+    }
+
+    /**
+     * 发送消息
+     * @param topic 主题
+     * @param msg 待发送的消息
+     */
+    public static void publish(String topic, String msg) {
+        int qos = 0;
+        try {
+            if (client != null) {
+                client.publish(topic, msg.getBytes(), (int) qos, false);
+            }
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 发送消息
+     * @param topic 主题
+     * @param msg 消息
+     * @param qos 服务质量
+     */
+    public static void publish(String topic, String msg, int qos) {
+        try {
+            if (client != null) {
+                client.publish(topic, msg.getBytes(), qos, false);
+            }
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void init() {
+        // 服务器地址（协议+地址+端口号）
+        client = new MqttAndroidClient(this, host, clientId);
+        // 设置MQTT监听并且接受消息
+        client.setCallback(mqttCallback);
+
+        conOpt = new MqttConnectOptions();
+        // 清除缓存
+        conOpt.setCleanSession(true);
+        // 设置超时时间，单位：秒
+        conOpt.setConnectionTimeout(10);
+        // 心跳包发送间隔，单位：秒
+        conOpt.setKeepAliveInterval(60);
+        //设置自动重连
+        conOpt.setAutomaticReconnect(true);
+//        conOpt.setUserName(username);
+//        conOpt.setPassword(password.toCharArray());     //将字符串转换为字符串数组
+        doClientConnection();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        stopSelf();
+        try {
+            if (client != null) {
+                client.disconnect();
+                Thread.sleep(50);
+                client.unregisterResources();
+            }
+        } catch (MqttException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
+    /**
+     * 连接MQTT服务器
+     */
+    private void doClientConnection() {
+        if (!client.isConnected() &amp;&amp; isConnectIsNormal()) {
+            try {
+                client.connect(conOpt, null, iMqttActionListener);
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    // MQTT是否连接成功
+    private final IMqttActionListener iMqttActionListener = new IMqttActionListener() {
+
+        @Override
+        public void onSuccess(IMqttToken arg0) {
+            Log.i(TAG, &quot;连接成功 &quot;);
+            try {
+                // 订阅subTopic话题
+                client.subscribe(subTopic, 0);
+                if (IGetMessageCallBack != null) {
+                    IGetMessageCallBack.onSuccess(arg0);
+                }
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onFailure(IMqttToken arg0, Throwable arg1) {
+            arg1.printStackTrace();
+            // 连接失败，重连
+            if (IGetMessageCallBack != null) {
+                IGetMessageCallBack.onFailure(arg0, arg1);
+            }
+        }
+    };
+
+    // MQTT监听并且接受消息
+    private final MqttCallback mqttCallback = new MqttCallback() {
+
+        @Override
+        public void messageArrived(String topic, MqttMessage message) {
+
+            String str1 = new String(message.getPayload());
+            if (IGetMessageCallBack != null) {
+                IGetMessageCallBack.setMessage(str1);
+            }
+        }
+
+        @Override
+        public void deliveryComplete(IMqttDeliveryToken arg0) {
+
+        }
+
+        @Override
+        public void connectionLost(Throwable arg0) {
+            // 失去连接，重连
+            if (IGetMessageCallBack != null) {
+                IGetMessageCallBack.connectionLost(arg0);
+            }
+        }
+    };
+
+    /**
+     * 判断网络是否连接
+     */
+    private boolean isConnectIsNormal() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
+        if (info != null &amp;&amp; info.isAvailable()) {
+            String name = info.getTypeName();
+            Log.e(TAG, &quot;MQTT当前网络名称：&quot; + name);
+            return true;
+        } else {
+            Log.e(TAG, &quot;MQTT 没有可用网络&quot;);
+            return false;
+        }
+    }
+
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.e(getClass().getName(), &quot;onBind&quot;);
+        return new CustomBinder();
+    }
+
+    public void setIGetMessageCallBack(IGetMessageCallBack IGetMessageCallBack) {
+        this.IGetMessageCallBack = IGetMessageCallBack;
+    }
+
+    public class CustomBinder extends Binder {
+        public XRMqttService getService() {
+            return XRMqttService.this;
+        }
+    }
+}
+</code></pre>
+<h1 id="xrserviceconnection">XRServiceConnection</h1>
+<pre><code class="language-java">public class XRServiceConnection implements ServiceConnection {
+
+    private XRMqttService XRMqttService;
+    private IGetMessageCallBack IGetMessageCallBack;
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        XRMqttService = ((XRMqttService.CustomBinder)iBinder).getService();
+        XRMqttService.setIGetMessageCallBack(IGetMessageCallBack);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+
+    }
+
+    public XRMqttService getMqttService(){
+        return XRMqttService;
+    }
+
+    public void setIGetMessageCallBack(IGetMessageCallBack IGetMessageCallBack){
+        this.IGetMessageCallBack = IGetMessageCallBack;
+    }
+}
+</code></pre>
+<h1 id="igetmessagecallbcak">IGetMessageCallBcak</h1>
+<p><strong>数据回调，调用mqtt服务的主类中必须继承该接口</strong></p>
+<pre><code class="language-java">public interface IGetMessageCallBack {
+    void setMessage(String message);
+    void onSuccess(IMqttToken arg0);
+    void onFailure(IMqttToken arg0, Throwable arg1);
+    void connectionLost(Throwable arg0);
+}
+</code></pre>
+<h1 id="activity中引用">Activity中引用</h1>
+<pre><code class="language-java">private String getRandomString(int length) {
+	String str = &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;;
+	Random random = new Random();
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i &lt; length; i++) {
+		int number = random.nextint(62);
+		sb.append(str.charAt(number));
+	}
+	return sb.toString();
+}
+
+@Override
+public void setMessage(String message) {
+	try {
+		//          解析泛型数据，应该如此封装数据
+		Type type = new TypeToken&lt;SensorData&lt;SubData&gt;&gt;() {}.getType();
+		SensorData&lt;SubData&gt; sensorData = gson.fromJson(message, type);
+		Log.e(TAG, &quot;setMessage: &quot; + sensorData.toString());
+		if (sensorData.getSensor().equals(&quot;SF6&quot;)) {
+			sf6.setText(getString(R.string.sf6, sensorData.getData().getConcentration()) + &quot;ppm&quot;);
+			sf6.setTextColor((double) sensorData.getData().getConcentration() &gt;= 1000 ? 0xffff0000 : 0xff0093dd);
+		} else if (sensorData.getSensor().equals(&quot;O2&quot;)) {
+			oxygen.setText(getString(R.string.oxygen, sensorData.getData().getConcentration()) + &quot;%&quot;);
+			oxygen.setTextColor((double) sensorData.getData().getConcentration() &lt;= 18 ? 0xffff0000 : 0xff0093dd);
+		}
+	}
+	catch (Exception e) {
+		Log.e(TAG, &quot;setMessage: &quot; + e.getMessage());
+	}
+}
+
+@Override
+public void onSuccess(IMqttToken arg0) {
+	Toast.makeText(this, &quot;XRMSC: Connected&quot;, Toast.LENGTH_lONG).show();
+}
+
+@Override
+public void onFailure(IMqttToken arg0, Throwable arg1) {
+	Log.e(TAG, &quot;onFailure: 连接失败&quot;);
+	Toast.makeText(this, &quot;XRMSC: Error&quot;, Toast.LENGTH_lONG).show();
+}
+
+@Override
+public void connectionLost(Throwable arg0) {
+	Toast.makeText(this, &quot;XRMSC: Connection lost&quot;, Toast.LENGTH_lONG).show();
+}
+XRServiceConnection serviceConnection;
+
+@Override
+public void onCreate(Bundle icicle) {
+	// 省略
+	serviceConnection = new XRServiceConnection();
+	serviceConnection.setIGetMessageCallBack(WIFIRobot.this);
+	XRMqttService.setHost(Constant.CONTROL_URL);
+	XRMqttService.setSubTopic(&quot;xrrobot/client/#&quot;);
+	XRMqttService.setClientId(&quot;android-iot-&quot; + getRandomString(6));
+	//		XRMqttService.setUsername(&quot;android-client&quot;);
+	bindService(new Intent(this, XRMqttService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+}
+
+@Override
+protected void onDestroy() {
+	if (serviceConnection != null) {
+	// 用完之后，需要手动解绑，否则会报异常
+		unbindService(serviceConnection);
+	}
+}
+
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[创建electron-vue模板]]></title>
         <id>https://ceoifung.github.io/post/how-to-create-vue-electron-template/</id>
