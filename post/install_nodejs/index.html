@@ -6,7 +6,7 @@
 
 <title>linux 安装nodejs方法 | 饮尽鸿爪下的雪泥</title>
 
-<link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1637392247523">
+<link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1638597549247">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://ceoifung.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1637392247523" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1638597549247" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -118,6 +118,26 @@
 sudo ln /home/ubuntu/node-v14.17.5-linux-x64/bin/npm /usr/local/bin/npm
 </code></pre>
 <p>配置完毕之后，可以查看一下是否安装成功</p>
+<pre><code class="language-shell">node -v
+npm -v
+</code></pre>
+<h1 id="配置软连接无法访问npm">配置软连接无法访问npm</h1>
+<p>如果配置了软连接，使用<code>npm -v</code> 却无法获取相应的版本信息的话，可以使用如下方法，进行重新设置</p>
+<ul>
+<li>编辑<code>/etc/profile</code>，增阿如下内容</li>
+</ul>
+<pre><code class="language-shell">#SET PATH FOR NODEJS
+export NODE_HOME=/opt/node-v8.11.4-linux-x64
+export PATH=$NODE_HOME/bin:$PATH
+</code></pre>
+<ul>
+<li>使用指令使环境变量生效</li>
+</ul>
+<pre><code class="language-shell">source /etc/profile
+</code></pre>
+<ul>
+<li>测试结果</li>
+</ul>
 <pre><code class="language-shell">node -v
 npm -v
 </code></pre>

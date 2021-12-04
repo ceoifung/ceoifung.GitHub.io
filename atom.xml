@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-11-20T07:10:50.357Z</updated>
+    <updated>2021-12-04T05:59:15.079Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
@@ -636,6 +636,26 @@ public static boolean isVpnProxy(final Context context) {
 sudo ln /home/ubuntu/node-v14.17.5-linux-x64/bin/npm /usr/local/bin/npm
 </code></pre>
 <p>配置完毕之后，可以查看一下是否安装成功</p>
+<pre><code class="language-shell">node -v
+npm -v
+</code></pre>
+<h1 id="配置软连接无法访问npm">配置软连接无法访问npm</h1>
+<p>如果配置了软连接，使用<code>npm -v</code> 却无法获取相应的版本信息的话，可以使用如下方法，进行重新设置</p>
+<ul>
+<li>编辑<code>/etc/profile</code>，增阿如下内容</li>
+</ul>
+<pre><code class="language-shell">#SET PATH FOR NODEJS
+export NODE_HOME=/opt/node-v8.11.4-linux-x64
+export PATH=$NODE_HOME/bin:$PATH
+</code></pre>
+<ul>
+<li>使用指令使环境变量生效</li>
+</ul>
+<pre><code class="language-shell">source /etc/profile
+</code></pre>
+<ul>
+<li>测试结果</li>
+</ul>
 <pre><code class="language-shell">node -v
 npm -v
 </code></pre>
