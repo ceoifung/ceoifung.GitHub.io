@@ -2,13 +2,57 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://ceoifung.github.io</id>
     <title>饮尽鸿爪下的雪泥</title>
-    <updated>2021-12-04T05:59:15.079Z</updated>
+    <updated>2022-01-19T07:24:02.865Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://ceoifung.github.io"/>
     <link rel="self" href="https://ceoifung.github.io/atom.xml"/>
     <logo>https://ceoifung.github.io/images/avatar.png</logo>
     <icon>https://ceoifung.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, 饮尽鸿爪下的雪泥</rights>
+    <rights>All rights reserved 2022, 饮尽鸿爪下的雪泥</rights>
+    <entry>
+        <title type="html"><![CDATA[Linux C++获取当前软件所在的绝对路径]]></title>
+        <id>https://ceoifung.github.io/post/linux-get-program-execute-absolute-file/</id>
+        <link href="https://ceoifung.github.io/post/linux-get-program-execute-absolute-file/">
+        </link>
+        <updated>2022-01-19T07:22:09.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="源代码">源代码</h1>
+<pre><code class="language-c++">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+# include &lt;iostream&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+char *getFilePath(char* buf, int count)
+{
+    int i;
+    int rslt = readlink(&quot;/proc/self/exe&quot;, buf, count - 1); //将seld改为进程pid就是获取任意进程路径
+    if (rslt &lt; 0 || (rslt &gt;= count - 1))
+    {
+        return NULL;
+    }
+    buf[rslt] = '\0';
+    for (i = rslt; i &gt;= 0; i--)
+    {
+        if (buf[i] == '/')
+        {
+            buf[i + 1] = '\0';
+            break;
+        }
+    }
+    return buf;
+}
+
+int main(){
+    char *buf;
+    printf(&quot;current absolute path:%s\n&quot;, strcat(getFilePath(buf, 200), &quot;data.json&quot;));
+    return 0;
+}
+</code></pre>
+<h1 id="编译">编译</h1>
+<pre><code class="language-shell">g++ main.cpp -o out
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Android Mqtt使用]]></title>
         <id>https://ceoifung.github.io/post/android-mqtt-usage/</id>

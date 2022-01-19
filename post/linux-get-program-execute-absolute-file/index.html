@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>饮尽鸿爪下的雪泥</title>
+<title>Linux C++获取当前软件所在的绝对路径 | 饮尽鸿爪下的雪泥</title>
 
 <link rel="shortcut icon" href="https://ceoifung.github.io/favicon.ico?v=1642577036181">
 
@@ -25,11 +25,11 @@
 
 
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -85,37 +85,75 @@
     </div>
 </nav>
 
-        <div class="post-container">
-            <div class="post-detail gt-bg-theme-color-first">
-                <article class="gt-post-content">
-                    <h2 class="post-title">标签</h2>
-        <div class="tags-container">
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/DWEnkTHtS/">#linux</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/9cPOu1k0h/">#MySQL</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/veK5_wEPF/">#android</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/8T4cQy4Va2/">#proxy</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/xtShXGpeX/">#Linux</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/qUgIHKhlc_/">#nodejs</a>
-            
-                <a class="tag gt-c-content-color-first gt-a-link"
-                   href="https://ceoifung.github.io/tag/8R9Gbvfoy/">#Debian</a>
-            
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Linux C++获取当前软件所在的绝对路径
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-01-19 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <h1 id="源代码">源代码</h1>
+<pre><code class="language-c++">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+# include &lt;iostream&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+char *getFilePath(char* buf, int count)
+{
+    int i;
+    int rslt = readlink(&quot;/proc/self/exe&quot;, buf, count - 1); //将seld改为进程pid就是获取任意进程路径
+    if (rslt &lt; 0 || (rslt &gt;= count - 1))
+    {
+        return NULL;
+    }
+    buf[rslt] = '\0';
+    for (i = rslt; i &gt;= 0; i--)
+    {
+        if (buf[i] == '/')
+        {
+            buf[i + 1] = '\0';
+            break;
+        }
+    }
+    return buf;
+}
+
+int main(){
+    char *buf;
+    printf(&quot;current absolute path:%s\n&quot;, strcat(getFilePath(buf, 200), &quot;data.json&quot;));
+    return 0;
+}
+</code></pre>
+<h1 id="编译">编译</h1>
+<pre><code class="language-shell">g++ main.cpp -o out
+</code></pre>
+
+                </div>
+            </article>
         </div>
-    </article>
-</div>
-</div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://ceoifung.github.io/post/android-mqtt-usage/" class="post-title gt-a-link">
+                    Android Mqtt使用
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first"></div>
     <div class="social-container">
